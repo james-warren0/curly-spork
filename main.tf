@@ -3,5 +3,5 @@ terraform {
 }
 
 data "external" "example" {
-  program = ["echo", "{\"foo\": \"bar\"}"]
+  program = ["echo", "{\"foo\": \"${timestamp()}\"}"]
 }
