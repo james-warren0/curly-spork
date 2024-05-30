@@ -1,0 +1,16 @@
+name: Hello
+
+on:
+  schedule:
+    - cron: '37 0 * * 2,5'  # Approximately EOD Pacific, Monday/Thurs
+  push:
+
+jobs:
+  do-something:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+      - name: something
+        run: |
+          echo "oh hi"
